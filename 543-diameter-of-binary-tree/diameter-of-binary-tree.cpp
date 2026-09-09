@@ -11,27 +11,26 @@
  */
 class Solution {
 public:
-    int height(TreeNode* root){
+    pair<int,int> FastDiameter(TreeNode* root){
         if(root==NULL){
-            return NULL;
+            pair<int,int> p = make_pair(0,0);
+            return p;
         }
 
-        int leftHeight = height(root->left);
-        int rightHeight = height(root->right);
-        int answer = max(leftHeight,rightHeight);
+        pair<int,int> leftDiameter = FastDiameter(root->left);
+        pair<int,int> rightDiameter = FastDiameter(root->right);
 
-        return answer+1;
+        int opt1 = leftDiameter.first;
+        int opt2 = rightDiameter.first;
+        int opt3 = leftDiameter.second + rightDiameter.second;
+
+        pair<int,int> ans;
+        ans.first = max(opt1,max(opt2,opt3));
+        ans.second = max(leftDiameter.second,rightDiameter.second)+1;
+
+        return ans;
     }
     int diameterOfBinaryTree(TreeNode* root) {
-        if(root==NULL){
-            return 0;
-        }
-
-        int leftDiameter = diameterOfBinaryTree(root->left);
-        int rightDiameter = diameterOfBinaryTree(root->right);
-        int answer2 = height(root->left)+height(root->right);
-
-        int final = max(leftDiameter,max(rightDiameter,answer2));
-        return final;
+        return FastDiameter(root).first;
     }
 };
